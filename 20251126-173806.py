@@ -180,7 +180,6 @@ async def handle_join_leave(msg: Message):
     # if supergroup - try delete join/leave message to keep chat clean
     if is_supergroup(msg.chat.id):
         try:
-            await msg.delete()
         except Exception:
             pass
     else:
@@ -188,6 +187,7 @@ async def handle_join_leave(msg: Message):
             for user in msg.new_chat_members:
                 try:
                     await msg.reply(f"Welcome, {user.first_name}!")
+                    await msg.delete()
                 except Exception:
                     pass
 
@@ -288,7 +288,7 @@ async def handle_admin_commands(msg: Message):
         await msg.reply(f"❌ Error while executing the command: {e}")
 
 # =================== lesson_schedule, rules, help ===================
-@dp.message(F.text == "/lesson_schedule")
+@dp.message(commands = ["/lesson_schedule"])
 async def lesson_schedule(msg: Message):
     # if text has extra content, delete and optionally change karma (your logic referenced change_karma earlier)
     parts = msg.text.strip().split(maxsplit=1)
@@ -312,7 +312,7 @@ async def lesson_schedule(msg: Message):
     )
     await bot.send_message(msg.chat.id, schedule_text, parse_mode="Markdown")
 
-@dp.message(F.text == "/rules")
+@dp.message(commands=["rules"])
 async def rules_command(msg: Message):
     # if user added extra text - delete
     text_after = msg.text.replace('/rules', '', 1).strip()
@@ -355,7 +355,7 @@ async def help_command(msg: Message):
     )
     await msg.answer(help_text, parse_mode="Markdown")
 # =================== Speaking and Grammar Homework ===================
-@dp.message(F.text == "/speaking_homework")
+@dp.message(commands=["speaking_homework"])
 async def speaking_homework(msg: Message):
     try:
         photo_paths = [
@@ -377,7 +377,7 @@ async def speaking_homework(msg: Message):
     except Exception as e:
         print(f"Error sending speaking homework: {e}")
 
-@dp.message(F.text == "/grammar_homework")
+@dp.message(commands=["grammar_homework"])
 async def grammar_homework(msg: Message):
     # ensure exact command
     if msg.text.strip() != "/grammar_homework":
