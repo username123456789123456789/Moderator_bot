@@ -335,8 +335,7 @@ async def rules_command(msg: Message):
 
 @dp.message(commands=["help"])
 async def help_command(msg: Message):
-    # Удаляем сообщение, если после команды есть любой текст (кроме @бота)
-    command_text = msg.text.split()[0]  # берём только саму команду
+    command_text = msg.text.split()[0]
     if msg.text.strip() != command_text:
         try:
             await msg.delete()
@@ -345,14 +344,14 @@ async def help_command(msg: Message):
         return
 
     help_text = (
-        "📘 *Available Commands:*\n\n"
-        "🔹 /help — list of all available commands\n"
-        "🔹 /rules — show the group rules\n"
-        "🔹 /lesson_schedule — English lesson schedule\n"
-        "🔹 /speaking_homework — current Speaking homework\n"
-        "🔹 /grammar_homework — current Grammar homework\n"
-        "🔹 /translate <word> — translate word (ru/tg → en)\n\n"
-        "❗ Adding any text after a command → your message will be deleted."
+        "*Available Commands:*\n\n"
+        "/help — list of all available commands\n"
+        "/rules — show the group rules\n"
+        "/lesson_schedule — English lesson schedule\n"
+        "/speaking_homework — current Speaking homework\n"
+        "/grammar_homework — current Grammar homework\n"
+        "/translate <word> — translate word\n\n"
+        "Adding any text after a command → message will be deleted."
     )
     await msg.answer(help_text, parse_mode="Markdown")
 # =================== Speaking and Grammar Homework ===================
@@ -402,7 +401,7 @@ async def grammar_homework(msg: Message):
 async def translate_word(msg: Message):
     parts = msg.text.split(maxsplit=1)
     if len(parts) < 2:
-        await bot.send_message(msg.chat.id, "❌ Please provide a single word to translate. Example: /translate привет")
+        await bot.send_message(msg.chat.id, "❌ Please provide a single word to translate. Example: /translate привет или hello")
         return
 
     text_to_translate = parts[1].strip()
