@@ -333,28 +333,28 @@ async def rules_command(msg: Message):
     )
     await bot.send_message(msg.chat.id, rules_text, parse_mode="Markdown")
 
-@dp.message(F.text == "/help")
+@dp.message(commands=["help"])
 async def help_command(msg: Message):
-    parts = msg.text.strip().split(maxsplit=1)
-    if len(parts) > 1:
+    # Удаляем сообщение, если после команды есть любой текст (кроме @бота)
+    command_text = msg.text.split()[0]  # берём только саму команду
+    if msg.text.strip() != command_text:
         try:
             await msg.delete()
-        except Exception:
+        except:
             pass
         return
 
     help_text = (
         "📘 *Available Commands:*\n\n"
-        "🔹 /help - list of all available commands\n"
-        "🔹 /rules - show the group rules\n"
-        "🔹 /speaking_homework - get the current Speaking homework\n"
-        "🔹 /grammar_homework - get the current Grammar homework\n"
-        "🔹 /lesson_schedule - shows the English lesson schedule\n"
-        "🔹 /translate <word> - translate Russian or Tajik words to English\n\n"
-        "❗ If you add any text after a command, your message will be deleted."
+        "🔹 /help — list of all available commands\n"
+        "🔹 /rules — show the group rules\n"
+        "🔹 /lesson_schedule — English lesson schedule\n"
+        "🔹 /speaking_homework — current Speaking homework\n"
+        "🔹 /grammar_homework — current Grammar homework\n"
+        "🔹 /translate <word> — translate word (ru/tg → en)\n\n"
+        "❗ Adding any text after a command → your message will be deleted."
     )
-    await bot.send_message(msg.chat.id, help_text, parse_mode="Markdown")
-
+    await msg.answer(help_text, parse_mode="Markdown")
 # =================== Speaking and Grammar Homework ===================
 @dp.message(F.text == "/speaking_homework")
 async def speaking_homework(msg: Message):
